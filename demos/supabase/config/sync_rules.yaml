@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://unpkg.com/@powersync/service-sync-rules@latest/schema/sync_rules.json
+#
+# See Documentation for more information:
+# https://docs.powersync.com/usage/sync-rules
+#
+# Note that changes to this file are not watched.
+# The service needs to be restarted for changes to take effect.
+
+bucket_definitions:
+  user_data:
+    # Separate bucket per customer
+    parameters: select customer_id from Customer where customer_id = request.user_id()
+    data:
+      - select * from Customer where customer_id = bucket.customer_id
+      - select * from Users where customer_id = bucket.customer_id
+      
+  product_data:
+    # All products and categories are available to all users
+    parameters: select 1
+    data:
+      - select * from Categories
+      - select * from Products
+      - select * from Menu
+      - select * from MenuProducts
+      
+  order_data:
+    # Orders for the customer
+    parameters: select customer_id from Customer where customer_id = request.user_id()
+    data:
+      - select o.* from Orders o
+        join Users u on u.customer_id = bucket.customer_id
+      - select * from MenuOrder where order_id in (
+          select o.order_id from Orders o
+          join Users u on u.customer_id = bucket.customer_id
+        )
+      - select * from ProductOrder where order_id in (
+          select o.order_id from Orders o
+          join Users u on u.customer_id = bucket.customer_id
+        )
