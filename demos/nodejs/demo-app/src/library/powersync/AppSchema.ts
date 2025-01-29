@@ -66,17 +66,21 @@ const orders = new Table({
     status: column.text,
     order_type: column.text,
     totalPrice: column.integer,
-    ingredients: column.text,
-    paymentMethod: column.text
+    paymentMethod: column.text,
+    user_id: column.text
 });
 
 const menuOrder = new Table({
     menu_id: column.text,
+    ingredients: column.text,
+    quantity: column.integer,
     order_id: column.text
 }, { indexes: { menu: ['menu_id'], order: ['order_id'] } });
 
 const productOrder = new Table({
     order_id: column.text,
+    ingredients: column.text,
+    quantity: column.integer,
     product_id: column.text
 }, { indexes: { order: ['order_id'], product: ['product_id'] } });
 

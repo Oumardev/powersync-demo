@@ -43,7 +43,7 @@ replication:
       # Or use individual params
 
       # hostname: pg-db # From the Docker Compose service name
-      # port: 5432
+      # port: 5430
       # database: postgres
       # username: postgres
       # password: mypassword

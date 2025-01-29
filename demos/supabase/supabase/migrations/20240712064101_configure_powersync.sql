@@ -78,9 +78,10 @@ create table
     status text not null check (status in ('pending', 'in_cooking', 'packaging', 'checkout', 'validated', 'delivered', 'cancelled')),
     order_type text check (order_type in ('order_status')),
     totalPrice integer not null,
-    ingredients char(200) not null,
     paymentMethod char(200) not null,
-    constraint orders_pkey primary key (id)
+    user_id uuid not null,
+    constraint orders_pkey primary key (id),
+    constraint orders_user_id_fkey foreign key (user_id) references public.Users(id) on delete cascade
   ) tablespace pg_default;
 
 create table
@@ -88,6 +89,8 @@ create table
     id uuid not null default gen_random_uuid(),
     menu_id uuid not null,
     order_id uuid not null,
+    ingredients char(200) not null,
+    quantity int not null,
     constraint menu_order_pkey primary key (id),
     constraint menu_order_menu_id_fkey foreign key (menu_id) references public.Menu(id) on delete cascade,
     constraint menu_order_order_id_fkey foreign key (order_id) references public.Orders(id) on delete cascade
@@ -97,7 +100,9 @@ create table
   public.ProductOrder (
     id uuid not null default gen_random_uuid(),
     product_id uuid not null,
-    constraint product_order_pkey primary key (id, id),
+    ingredients char(200) not null,
+    quantity int not null,
+    constraint product_order_pkey primary key (id),
     constraint product_order_order_id_fkey foreign key (order_id) references public.Orders(id) on delete cascade,
     constraint product_order_product_id_fkey foreign key (product_id) references public.Products(id) on delete cascade
   ) tablespace pg_default;

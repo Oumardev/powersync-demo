@@ -82,15 +82,18 @@ CREATE TABLE Orders (
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'in_cooking', 'packaging', 'checkout', 'validated', 'delivered', 'cancelled')),
     order_type VARCHAR(20) CHECK (order_type IN ('order_status')),
     totalPrice INT NOT NULL,
-    ingredients CHAR(200) NOT NULL,
     paymentMethod CHAR(200) NOT NULL,
-    PRIMARY KEY (id)
+    user_id CHAR(36) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES Users(id)
 );
 
 CREATE TABLE MenuOrder (
     id CHAR(36) NOT NULL DEFAULT (UUID()),
     menu_id CHAR(36) NOT NULL,
     order_id CHAR(36) NOT NULL,
+    ingredients CHAR(200) NOT NULL,
+    quantity INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (menu_id) REFERENCES Menu(id),
     FOREIGN KEY (order_id) REFERENCES Orders(id)
@@ -99,6 +102,8 @@ CREATE TABLE MenuOrder (
 CREATE TABLE ProductOrder (
     id CHAR(36) NOT NULL DEFAULT (UUID()),
     product_id CHAR(36) NOT NULL,
+    ingredients CHAR(200) NOT NULL,
+    quantity INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (order_id) REFERENCES Orders(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)

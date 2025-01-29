@@ -64,15 +64,19 @@ export const schema = {
     status: types.enum(['pending', 'in_cooking', 'packaging', 'checkout', 'validated', 'delivered', 'cancelled']),
     order_type: types.enum(['order_status']),
     totalPrice: types.number,
-    ingredients: types.string,
     paymentMethod: types.string
   },
   MenuOrder: {
     _id: types.string,
+    ingredients: types.string,
+    quantity: types.number,
     menu_id: types.string,
     order_id: types.string
   },
   ProductOrder: {
+    _id: types.string,
+    ingredients: types.string,
+    quantity: types.number,
     order_id: types.string,
     product_id: types.string
   }

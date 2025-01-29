@@ -64,18 +64,22 @@ CREATE TABLE Orders (
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'in_cooking', 'packaging', 'checkout', 'validated', 'delivered', 'cancelled')),
     order_type VARCHAR(20) CHECK (order_type IN ('order_status')),
     totalPrice int NOT NULL,
-    ingredients VARCHAR(200) NOT NULL,
-    paymentMethod VARCHAR(200) NOT NULL
+    paymentMethod VARCHAR(200) NOT NULL,
+    user_id uuid NOT NULL REFERENCES Users(id)
 );
 
 CREATE TABLE MenuOrder (
     id uuid NOT NULL default gen_random_uuid () PRIMARY KEY,
+    ingredients VARCHAR(200) NOT NULL,
+    quantity int NOT NULL,
     menu_id uuid NOT NULL REFERENCES Menu(id),
     order_id uuid NOT NULL REFERENCES Orders(id)
 );
 
 CREATE TABLE ProductOrder (
     id uuid NOT NULL default gen_random_uuid () PRIMARY KEY,
+    ingredients VARCHAR(200) NOT NULL,
+    quantity int NOT NULL,
     order_id uuid NOT NULL REFERENCES Orders(id),
     product_id uuid NOT NULL REFERENCES Products(id)
 );
